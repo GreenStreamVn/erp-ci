@@ -25,6 +25,13 @@ jobs:
           private-key: ${{ secrets.BUILDER_APP_KEY }}
           owner: ${{ github.repository_owner }}
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: GreenStreamVn/erp-build
+          token: ${{ steps.generate-token.outputs.token }}
+          path: erp-build
+
       - name: Build and push
         uses: docker/bake-action@v5
         with:
