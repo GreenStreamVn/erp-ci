@@ -28,6 +28,6 @@ jobs:
       - name: Build and push
         uses: docker/bake-action@v5
         with:
-          source: "${{ github.server_url }}/${{ secrets.SCRIPT_REPO }}.git#main"
+          source: "https://github.com/GreenStreamVn/erp-build.git"
           push: true
           github-token: ${{ steps.generate-token.outputs.token }}
