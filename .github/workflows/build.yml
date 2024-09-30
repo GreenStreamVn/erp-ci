@@ -38,10 +38,12 @@ jobs:
           source: "https://github.com/GreenStreamVn/erp-build.git"
           push: true
           github-token: ${{ steps.generate-token.outputs.token }}
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
         env:
           BUILDX_BAKE_GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          GIT_AUTH_USERNAME: ${{ secrets.BUILDER_APP_NAME }}
           GSV_ENTERPRISE_REPO_NAME: ${{ secrets.GSV_ENTERPRISE_REPO_NAME }}
           DOCKER_BUILD_SUMMARY: false
           DOCKER_BUILD_RECORD_UPLOAD: false
