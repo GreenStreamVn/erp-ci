@@ -39,6 +39,7 @@ jobs:
           push: true
         env:
           BUILDX_BAKE_GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
           DOCKER_BUILD_SUMMARY: false
           DOCKER_BUILD_RECORD_UPLOAD: false
           DOCKER_BUILD_CHECKS_ANNOTATIONS: false
