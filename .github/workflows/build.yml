@@ -23,6 +23,7 @@ jobs:
         with:
           app-id: ${{ vars.BUILDER_APP_ID }}
           private-key: ${{ secrets.BUILDER_APP_KEY }}
+          owner: ${{ github.repository_owner }}
 
       - name: Build and push
         uses: docker/bake-action@v5
