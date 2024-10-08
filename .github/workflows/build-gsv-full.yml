@@ -38,7 +38,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_frappe_revision
         with:
-          route: GET /repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.HRMS_BRANCH}}
+          route: GET /repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.ERP_FRAPPE_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
@@ -52,7 +52,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_hrms_revision
         with:
-          route: GET /repos/${{secrets.HRMS_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
+          route: GET /repos/${{secrets.ERP_HRMS_REPO_NAME}}/branches/${{secrets.ERP_HRMS_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
