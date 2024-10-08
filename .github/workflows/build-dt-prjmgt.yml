@@ -71,6 +71,7 @@ jobs:
           BUILDX_BAKE_GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
           BUILDKIT_PROGRESS: ${{ vars.BUILDKIT_PROGRESS }}
           GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
 
           FRAPPE_REPO_NAME: ${{secrets.ERP_FRAPPE_REPO_NAME}}
           FRAPPE_BRANCH: ${{secrets.ERP_FRAPPE_BRANCH}}
