@@ -1,0 +1,98 @@
+name: Build gsv full
+run-name: gsv full to  ${{ inputs.TARGET_ENV_NAME }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      TARGET_ENV:
+        description: Select a target environment
+        options:
+          - gsv_enterprise_ci
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.TARGET_ENV }}
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.BUILDER_APP_ID }}
+          private-key: ${{ secrets.BUILDER_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+
+
+      - uses: octokit/request-action@v2.x
+        id: get_frappe_revision
+        with:
+          route: GET repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.HRMS_BRANCH}}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - uses: octokit/request-action@v2.x
+        id: get_erpnext_revision
+        with:
+          route: GET repos/${{secrets.ERP_ERPNEXT_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - uses: octokit/request-action@v2.x
+        id: get_hrms_revision
+        with:
+          route: GET repos/${{secrets.HRMS_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - uses: octokit/request-action@v2.x
+        id: get_gsv_enterprise_revision
+        with:
+          route: GET repos/${{secrets.ERP_GSV_ENTERPRISE_REPO_NAME}}/branches/${{secrets.ERP_GSV_ENTERPRISE_BRANCH}}
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+
+      - name: Build and push
+        uses: docker/bake-action@v5
+        with:
+          source: "https://github.com/${{ secrets.ERP_BUILD_SCRIPT_REPO_NAME }}.git"
+          push: true
+          github-token: ${{ steps.generate-token.outputs.token }}
+          targets: ${{ secrets.ERP_DOCKER_TARGET }}
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
+        env:
+          BUILDX_BAKE_GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          BUILDKIT_PROGRESS: ${{ vars.BUILDKIT_PROGRESS }}
+          GIT_AUTH_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+          FRAPPE_REPO_NAME: ${{secrets.ERP_FRAPPE_REPO_NAME}}
+          FRAPPE_BRANCH: ${{secrets.ERP_FRAPPE_BRANCH}}
+          FRAPPE_REVISION: ${{ fromJson(steps.get_frappe_revision.outputs.data).commit.sha }}
+
+          ERPNEXT_REPO_NAME: ${{ secrets.ERP_ERPNEXT_REPO_NAME }}
+          ERPNEXT_BRANCH: ${{ secrets.ERP_ERPNEXT_BRANCH }}
+          ERPNEXT_REVISION: ${{ fromJson(steps.get_erpnext_revision.outputs.data).commit.sha }}
+
+          HRMS_REPO_NAME: ${{ secrets.ERP_HRMS_REPO_NAME }}
+          HRMS_BRANCH: ${{ secrets.ERP_HRMS_BRANCH }}
+          HRMS_REVISION: ${{ fromJson(steps.get_hrms_revision.outputs.data).commit.sha }}
+
+          GSV_ENTERPRISE_REPO_NAME: ${{ secrets.ERP_GSV_ENTERPRISE_REPO_NAME }}
+          GSV_ENTERPRISE_BRANCH: ${{ secrets.ERP_GSV_ENTERPRISE_BRANCH }}
+          GSV_ENTERPRISE_REVISION: ${{ fromJson(steps.get_gsv_enterprise_revision.outputs.data).commit.sha }}
+
+          DOCKER_BUILD_SUMMARY: false
+          DOCKER_BUILD_RECORD_UPLOAD: false
+          DOCKER_BUILD_CHECKS_ANNOTATIONS: false
