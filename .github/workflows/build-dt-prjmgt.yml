@@ -6,6 +6,8 @@ on:
     inputs:
       TARGET_ENV:
         description: Select a target environment
+        type: choice
+        required: true
         options:
           - dt_prjmgt_ci
 
