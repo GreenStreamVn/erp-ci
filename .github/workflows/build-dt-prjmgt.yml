@@ -1,4 +1,4 @@
-name: Build DT-PRJMGT
+name: Build dt prjmgt
 run-name: dt prjmgt to  ${{ inputs.TARGET_ENV_NAME }}
 
 on:
