@@ -1,5 +1,5 @@
 name: Build dt prjmgt
-run-name: dt prjmgt to  ${{ inputs.TARGET_ENV_NAME }}
+run-name: dt prjmgt to  ${{ inputs.TARGET_ENV }}
 
 on:
   workflow_dispatch:

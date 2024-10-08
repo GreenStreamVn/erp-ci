@@ -1,5 +1,5 @@
 name: Build gsv full
-run-name: gsv full to  ${{ inputs.TARGET_ENV_NAME }}
+run-name: gsv full to  ${{ inputs.TARGET_ENV }}
 
 on:
   workflow_dispatch:
