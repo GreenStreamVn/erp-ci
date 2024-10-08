@@ -38,28 +38,28 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_frappe_revision
         with:
-          route: GET repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.HRMS_BRANCH}}
+          route: GET /repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.HRMS_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - uses: octokit/request-action@v2.x
         id: get_erpnext_revision
         with:
-          route: GET repos/${{secrets.ERP_ERPNEXT_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
+          route: GET /repos/${{secrets.ERP_ERPNEXT_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - uses: octokit/request-action@v2.x
         id: get_hrms_revision
         with:
-          route: GET repos/${{secrets.HRMS_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
+          route: GET /repos/${{secrets.HRMS_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - uses: octokit/request-action@v2.x
         id: get_gsv_enterprise_revision
         with:
-          route: GET repos/${{secrets.ERP_GSV_ENTERPRISE_REPO_NAME}}/branches/${{secrets.ERP_GSV_ENTERPRISE_BRANCH}}
+          route: GET /repos/${{secrets.ERP_GSV_ENTERPRISE_REPO_NAME}}/branches/${{secrets.ERP_GSV_ENTERPRISE_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
