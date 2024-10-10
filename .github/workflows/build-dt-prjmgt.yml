@@ -11,6 +11,10 @@ on:
         options:
           - dt_prjmgt_ci
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
