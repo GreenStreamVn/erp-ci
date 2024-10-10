@@ -15,6 +15,10 @@ defaults:
   run:
     shell: bash
 
+concurrency:
+  group: gsv-full-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -39,29 +43,29 @@ jobs:
           owner: ${{ github.repository_owner }}
 
 
-      - uses: octokit/request-action@v2.x
-        id: get_frappe_revision
+      - id: get_frappe_revision
+        uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{secrets.ERP_FRAPPE_REPO_NAME}}/branches/${{secrets.ERP_FRAPPE_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
-      - uses: octokit/request-action@v2.x
-        id: get_erpnext_revision
+      - id: get_erpnext_revision
+        uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{secrets.ERP_ERPNEXT_REPO_NAME}}/branches/${{secrets.ERP_ERPNEXT_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
-      - uses: octokit/request-action@v2.x
-        id: get_hrms_revision
+      - id: get_hrms_revision
+        uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{secrets.ERP_HRMS_REPO_NAME}}/branches/${{secrets.ERP_HRMS_BRANCH}}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
-      - uses: octokit/request-action@v2.x
-        id: get_gsv_enterprise_revision
+      - id: get_gsv_enterprise_revision
+        uses: octokit/request-action@v2.x
         with:
           route: GET /repos/${{secrets.ERP_GSV_ENTERPRISE_REPO_NAME}}/branches/${{secrets.ERP_GSV_ENTERPRISE_BRANCH}}
         env:
