@@ -11,6 +11,10 @@ on:
         options:
           - gsv_enterprise_ci
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
