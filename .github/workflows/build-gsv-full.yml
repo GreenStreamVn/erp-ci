@@ -11,6 +11,12 @@ on:
         options:
           - gsv_enterprise_ci
 
+  workflow_call:
+    inputs:
+      TARGET_ENV:
+        type: string
+        required: true
+
 defaults:
   run:
     shell: bash
